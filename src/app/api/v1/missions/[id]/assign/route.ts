@@ -4,13 +4,16 @@ import { WorkflowEngine } from '@/modules/workflow-engine';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // Correction Next.js 15
 ) {
   try {
     const supabase = createClient();
-    const missionId = params.id;
-    const body = await request.json();
     
+    // Résolution asynchrone des paramètres (Next.js 15)
+    const resolvedParams = await params;
+    const missionId = resolvedParams.id;
+    
+    const body = await request.json();
     const { driverId } = body;
 
     if (!driverId) {

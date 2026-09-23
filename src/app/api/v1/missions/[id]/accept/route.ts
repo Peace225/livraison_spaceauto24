@@ -3,10 +3,13 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = createClient();
-  const missionId = params.id;
+  
+  // Correction Next.js 15 : params doit être "awaité"
+  const resolvedParams = await params;
+  const missionId = resolvedParams.id;
 
   // 1. Récupération de la mission courante
   const { data: mission, error: fetchError } = await supabase
@@ -19,7 +22,7 @@ export async function POST(
     return NextResponse.json({ success: false, error: { code: 'MISSION_NOT_FOUND', message: 'Mission introuvable' } }, { status: 404 });
   }
 
-  // 2. Vérification des règles métier du Workflow Engine[cite: 1]
+  // 2. Vérification des règles métier du Workflow Engine
   if (mission.Status !== 'WAITING_PARTNER') {
     return NextResponse.json({ 
       success: false, 
@@ -36,9 +39,11 @@ export async function POST(
     })
     .eq('MissionID', missionId);
 
-  if (updateError) throw updateError;
+  if (updateError) {
+    return NextResponse.json({ success: false, error: { code: 'UPDATE_FAILED', message: updateError.message } }, { status: 500 });
+  }
 
-  // 4. Enregistrement dans le Status History[cite: 1]
+  // 4. Enregistrement dans le Status History
   await supabase
     .from('delivery_status_history')
     .insert({

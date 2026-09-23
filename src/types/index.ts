@@ -12,7 +12,16 @@ export type MissionStatus =
   | 'CUSTOMER_CONFIRMED'
   | 'MISSION_COMPLETED'
   | 'MISSION_CANCELLED'
-  | 'DELIVERY_FAILED';
+  | 'DELIVERY_FAILED'
+  // Nouveaux statuts d'anomalies requis par le Workflow Engine :
+  | 'PARTNER_TIMEOUT'
+  | 'PARTNER_REJECTED'
+  | 'DRIVER_REJECTED'
+  | 'PACKAGE_NOT_READY'
+  | 'PACKAGE_DAMAGED'
+  | 'CUSTOMER_ABSENT'
+  | 'ADDRESS_NOT_FOUND'
+  | 'CUSTOMER_REFUSED';
 
 // --- ENTITÉS (Modèle basé sur le Chapitre 19) ---
 export interface Partner {

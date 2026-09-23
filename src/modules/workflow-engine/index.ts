@@ -20,6 +20,15 @@ const ALLOWED_TRANSITIONS: Record<MissionStatus, MissionStatus[]> = {
   'MISSION_COMPLETED': [], // État final
   'MISSION_CANCELLED': [], // État final
   'DELIVERY_FAILED': [], // État final
+  // États d'anomalies configurés comme états finaux de transition :
+  'PARTNER_TIMEOUT': [],
+  'PARTNER_REJECTED': [],
+  'DRIVER_REJECTED': [],
+  'PACKAGE_NOT_READY': [],
+  'PACKAGE_DAMAGED': [],
+  'CUSTOMER_ABSENT': [],
+  'ADDRESS_NOT_FOUND': [],
+  'CUSTOMER_REFUSED': []
 };
 
 export class WorkflowEngine {
@@ -48,11 +57,11 @@ export class WorkflowEngine {
 
     const currentStatus = mission.Status as MissionStatus;
 
-    // 2. Vérification de la transition (Pas de saut d'état autorisé)[cite: 1]
+    // 2. Vérification de la transition (Pas de saut d'état autorisé)
     const allowedTargets = ALLOWED_TRANSITIONS[currentStatus] || [];
     if (!allowedTargets.includes(targetStatus)) {
       
-      // REQ-WFE-003: Une transition refusée est enregistrée dans le journal[cite: 1].
+      // REQ-WFE-003: Une transition refusée est enregistrée dans le journal.
       await supabase.from('delivery_audit_logs').insert({
         Module: 'WorkflowEngine',
         Action: 'TRANSITION_DENIED',
@@ -65,11 +74,11 @@ export class WorkflowEngine {
 
       return { 
         success: false, 
-        message: `Impossible de terminer cette action. La transition de ${currentStatus} vers ${targetStatus} est interdite.`[cite: 1]
+        message: `Impossible de terminer cette action. La transition de ${currentStatus} vers ${targetStatus} est interdite.`
       };
     }
 
-    // 3. Exécution de la transition via le Delivery Mission Manager (DMM)[cite: 1]
+    // 3. Exécution de la transition via le Delivery Mission Manager (DMM)
     const updateResult = await DeliveryMissionManager.updateMissionStatus(
       missionId,
       targetStatus,
@@ -81,14 +90,14 @@ export class WorkflowEngine {
       return updateResult;
     }
 
-    // 4. Déclenchement des processus asynchrones (Event Bus simulé)[cite: 1]
+    // 4. Déclenchement des processus asynchrones (Event Bus simulé)
     await this.triggerPostTransitionEvents(missionId, currentStatus, targetStatus);
 
     return { success: true, message: `Transition vers ${targetStatus} validée et exécutée.` };
   }
 
   /**
-   * REQ-WFE-004: Les notifications sont déclenchées uniquement après validation de la transition[cite: 1].
+   * REQ-WFE-004: Les notifications sont déclenchées uniquement après validation de la transition.
    */
   private static async triggerPostTransitionEvents(
     missionId: string,
@@ -97,7 +106,7 @@ export class WorkflowEngine {
   ) {
     const supabase = createClient();
 
-    // Mise à jour de la Timeline fonctionnelle (Mission Timeline)[cite: 1]
+    // Mise à jour de la Timeline fonctionnelle (Mission Timeline)
     await supabase.from('delivery_timelines').insert({
       MissionID: missionId,
       Event: `Changement de statut vers ${newStatus}`,
@@ -109,24 +118,24 @@ export class WorkflowEngine {
     // Exemple de routage des actions collatérales en fonction du nouveau statut
     switch (newStatus) {
       case 'PARTNER_ACCEPTED':
-        // Notifier l'OPS et le Partenaire, préparer le SLA Engine pour l'affectation livreur[cite: 1]
+        // Notifier l'OPS et le Partenaire, préparer le SLA Engine pour l'affectation livreur
         console.log(`[Event] PARTNER_ACCEPTED: Notification envoyée, attente livreur.`);
         break;
 
       case 'PACKAGE_PICKED_UP':
-        // Informer le Client + Marketplace que le colis est récupéré[cite: 1]
+        // Informer le Client + Marketplace que le colis est récupéré
         console.log(`[Event] PACKAGE_PICKED_UP: Notification Client et Marketplace déclenchée.`);
         break;
 
       case 'CUSTOMER_CONFIRMED':
-        // OTP Validé, la Marketplace est notifiée, clôture de la mission[cite: 1]
+        // OTP Validé, la Marketplace est notifiée, clôture de la mission
         console.log(`[Event] CUSTOMER_CONFIRMED: Envoi de la confirmation de paiement à Marketplace.`);
         break;
 
       case 'DELIVERY_FAILED':
       case 'PACKAGE_DAMAGED':
       case 'CUSTOMER_ABSENT':
-        // Toute anomalie crée automatiquement une entrée dans l'OPS Queue[cite: 1]
+        // Toute anomalie crée automatiquement une entrée dans l'OPS Queue
         await supabase.from('ops_queue').insert({
           Type: newStatus,
           MissionID: missionId,
@@ -136,7 +145,7 @@ export class WorkflowEngine {
         break;
     }
     
-    // Recalcul du Delivery Health Score (DHS) après un changement significatif[cite: 1]
+    // Recalcul du Delivery Health Score (DHS) après un changement significatif
     // await HealthScoreService.recalculate();
   }
 }

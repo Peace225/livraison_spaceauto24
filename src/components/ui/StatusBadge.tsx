@@ -20,6 +20,15 @@ const statusConfig: Record<MissionStatus, { label: string; colorClass: string }>
   MISSION_COMPLETED: { label: 'Terminée', colorClass: 'bg-green-100 text-green-700' },
   MISSION_CANCELLED: { label: 'Annulée', colorClass: 'bg-gray-100 text-gray-500' },
   DELIVERY_FAILED: { label: 'Échouée / Retour', colorClass: 'bg-red-100 text-red-700' },
+  // Ajout des statuts d'anomalies requis par TypeScript :
+  PARTNER_TIMEOUT: { label: 'Délai partenaire expiré', colorClass: 'bg-orange-200 text-orange-800' },
+  PARTNER_REJECTED: { label: 'Refusé par partenaire', colorClass: 'bg-red-100 text-red-700' },
+  DRIVER_REJECTED: { label: 'Refusé par livreur', colorClass: 'bg-red-100 text-red-700' },
+  PACKAGE_NOT_READY: { label: 'Colis non prêt', colorClass: 'bg-yellow-200 text-yellow-800' },
+  PACKAGE_DAMAGED: { label: 'Colis endommagé', colorClass: 'bg-red-200 text-red-800' },
+  CUSTOMER_ABSENT: { label: 'Client absent', colorClass: 'bg-orange-200 text-orange-800' },
+  ADDRESS_NOT_FOUND: { label: 'Adresse introuvable', colorClass: 'bg-orange-200 text-orange-800' },
+  CUSTOMER_REFUSED: { label: 'Refusé par le client', colorClass: 'bg-red-100 text-red-700' },
 };
 
 export function StatusBadge({ status, className = '' }: StatusBadgeProps) {

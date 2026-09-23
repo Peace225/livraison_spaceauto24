@@ -4,16 +4,16 @@ import { WorkflowEngine } from '@/modules/workflow-engine';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // Correction Next.js 15
 ) {
   try {
     const supabase = createClient();
     
-    // Dans Next.js 14+, params doit être "awaité" s'il est utilisé dynamiquement, 
-    // mais pour cette structure basique, on accède directement à l'ID.
-    const missionId = params.id;
-    const body = await request.json();
+    // Dans Next.js 15, params est asynchrone et DOIT être "awaité"
+    const resolvedParams = await params;
+    const missionId = resolvedParams.id;
     
+    const body = await request.json();
     const { otpCode, paymentMethod, deliveryFeeAmount, isProductCompliant } = body;
 
     // 1. Gestion du refus client (Le client inspecte et refuse le produit)

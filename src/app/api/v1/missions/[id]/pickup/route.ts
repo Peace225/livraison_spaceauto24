@@ -3,10 +3,13 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // Correction Next.js 15
 ) {
   const supabase = createClient();
-  const missionId = params.id;
+  
+  // Résolution asynchrone des paramètres
+  const resolvedParams = await params;
+  const missionId = resolvedParams.id;
 
   // 1. Récupérer l'état actuel de la mission
   const { data: mission, error: fetchError } = await supabase
@@ -42,7 +45,12 @@ export async function POST(
     })
     .eq('MissionID', missionId);
 
-  if (updateError) throw updateError;
+  if (updateError) {
+    return NextResponse.json({ 
+      success: false, 
+      error: { code: 'UPDATE_FAILED', message: updateError.message } 
+    }, { status: 500 });
+  }
 
   // 4. Traçabilité officielle (Status History)
   await supabase

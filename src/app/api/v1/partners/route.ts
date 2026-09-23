@@ -16,56 +16,57 @@ export async function POST(request: Request) {
     }
 
     // 1. Création de l'utilisateur dans Supabase Auth
-    // On utilise l'admin API ou on s'inscrit, mais l'utilisateur n'aura aucun droit tant qu'il n'est pas validé
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
-          role: 'Partner', // Assignation du rôle de base
+          role: 'Partner', 
         }
       }
     });
 
-    if (authError || !authData.user) {
+    // Sécurisation stricte pour TypeScript
+    const user = authData?.user;
+
+    if (authError || !user) {
       return NextResponse.json({
         success: false,
-        error: { code: 'AUTH_CREATION_FAILED', message: authError?.message }
+        error: { code: 'AUTH_CREATION_FAILED', message: authError?.message || 'Utilisateur introuvable' }
       }, { status: 400 });
     }
 
-    // 2. Création de l'entité Partenaire (Chapitre 19.3) - Statut bloqué par défaut[cite: 1]
+    // 2. Création de l'entité Partenaire - Statut bloqué par défaut
     const { data: partnerData, error: partnerError } = await supabase
       .from('delivery_partners')
       .insert({
-        PartnerID: authData.user.id, // L'ID Auth devient le PartnerID
+        PartnerID: user.id, // L'ID Auth devient le PartnerID
         CompanyName: companyName,
         ManagerName: managerName,
         Phone: phone,
-        Status: 'En attente de validation', // REQ strict de la V1[cite: 1]
+        Status: 'En attente de validation', // REQ strict de la V1
         AvailabilityStatus: 'Indisponible',
       })
       .select()
       .single();
 
     if (partnerError) {
-      // Rollback (idéalement) si la création métier échoue
       return NextResponse.json({
         success: false,
         error: { code: 'PARTNER_CREATION_FAILED', message: partnerError.message }
       }, { status: 500 });
     }
 
-    // 3. (Optionnel) Ajout des zones desservies initiales dans partner_zone[cite: 1]
+    // 3. (Optionnel) Ajout des zones desservies initiales dans partner_zone
     if (zones && Array.isArray(zones) && zones.length > 0) {
       const zoneInserts = zones.map(zoneId => ({
-        PartnerID: authData.user.id,
+        PartnerID: user.id,
         ZoneID: zoneId
       }));
       await supabase.from('partner_zone').insert(zoneInserts);
     }
 
-    // 4. Génération d'une alerte dans l'OPS Queue pour validation[cite: 1]
+    // 4. Génération d'une alerte dans l'OPS Queue pour validation
     await supabase.from('ops_queue').insert({
       Type: 'Validation Nouveau Partenaire',
       Priority: 'Moyenne',

@@ -16,15 +16,27 @@ const PUBLIC_STATUS_MAP: Record<MissionStatus, string> = {
   'CUSTOMER_CONFIRMED': 'Paiement confirmé',
   'MISSION_COMPLETED': 'Livraison terminée',
   'MISSION_CANCELLED': 'Livraison annulée',
-  'DELIVERY_FAILED': 'Retour en cours'
+  'DELIVERY_FAILED': 'Retour en cours',
+  // Traductions grand public pour les nouveaux statuts d'anomalies
+  'PARTNER_TIMEOUT': 'Recherche de transporteur',
+  'PARTNER_REJECTED': 'Recherche de transporteur',
+  'DRIVER_REJECTED': 'Livreur en cours d\'affectation',
+  'PACKAGE_NOT_READY': 'Colis en cours de préparation',
+  'PACKAGE_DAMAGED': 'Anomalie signalée (Colis endommagé)',
+  'CUSTOMER_ABSENT': 'Tentative de livraison (Client absent)',
+  'ADDRESS_NOT_FOUND': 'Tentative de livraison (Adresse introuvable)',
+  'CUSTOMER_REFUSED': 'Livraison refusée par le client'
 };
 
 export async function GET(
   request: Request,
-  { params }: { params: { orderId: string } }
+  { params }: { params: Promise<{ orderId: string }> } // Correction Next.js 15
 ) {
   const supabase = createClient();
-  const orderId = params.orderId;
+  
+  // Résolution asynchrone
+  const resolvedParams = await params;
+  const orderId = resolvedParams.orderId;
 
   // 1. Récupération de la mission et de sa timeline associée
   const { data: mission, error: missionError } = await supabase
@@ -49,7 +61,7 @@ export async function GET(
     }, { status: 404 });
   }
 
-  // 2. Formatage de la timeline publique[cite: 1]
+  // 2. Formatage de la timeline publique
   const publicTimeline = (mission.delivery_status_history as any[])
     .map(event => ({
       status: PUBLIC_STATUS_MAP[event.NewStatus as MissionStatus] || event.NewStatus,
@@ -58,7 +70,7 @@ export async function GET(
     // Déduplication visuelle si plusieurs statuts internes donnent le même statut public
     .filter((event, index, arr) => index === 0 || event.status !== arr[index - 1].status);
 
-  // 3. Format de réponse standardisé[cite: 1]
+  // 3. Format de réponse standardisé
   return NextResponse.json({
     success: true,
     data: {

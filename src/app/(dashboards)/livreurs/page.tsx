@@ -42,14 +42,14 @@ interface DriverRecord {
 const DRIVERS_DATA: DriverRecord[] = [
   { id: 'DRV-0201', name: 'Kouassi Jean', code: 'DRV-0201', phone: '07 12 34 56 78', type: 'Affilié', partenaire: 'Express CI', zone: 'Marcory', disponibilite: 'Occupé', mode: 'Auto', missionActuelle: { ref: 'DLV-2026-001245', trajet: 'Marcory → Cocody', statut: 'En livraison' } },
   { id: 'DRV-0202', name: 'Diabaté Moussa', code: 'DRV-0202', phone: '07 08 76 54 32', type: 'Affilié', partenaire: 'Moto Top', zone: 'Cocody', disponibilite: 'Disponible', mode: 'Manuel' },
-  { id: 'DRV-0203', name: 'Konan Yao', code: 'DRV-0203', type: 'Affilié', partenaire: 'Speed Livreur', zone: 'Yopougon', disponibilite: 'Occupé', mode: 'Auto', missionActuelle: { ref: 'DLV-2026-001241', trajet: 'Yopougon → Plateau', statut: 'En livraison' } },
-  { id: 'DRV-0204', name: 'Traoré Ibrahim', code: 'DRV-0204', type: 'Affilié', partenaire: 'Liva Auto', zone: 'Treichville', disponibilite: 'Indisponible', mode: 'Manuel' },
-  { id: 'DRV-0205', name: 'N\'Guessan Paul', code: 'DRV-0205', type: 'Affilié', partenaire: 'Auto Vrac', zone: 'Koumassi', disponibilite: 'Disponible', mode: 'Auto' },
-  { id: 'DRV-0206', name: 'Koffi Blaise', code: 'DRV-0206', type: 'Affilié', partenaire: 'Express CI', zone: 'Plateau', disponibilite: 'Compte suspendu', mode: 'N/A' },
-  { id: 'DRV-0207', name: 'Yao Christian', code: 'DRV-0207', type: 'Affilié', partenaire: 'Rapid Delivery', zone: 'Port-Bouët', disponibilite: 'Occupé', mode: 'Auto', missionActuelle: { ref: 'DLV-2026-001239', trajet: 'Port-Bouët → Marcory', statut: 'En livraison' } },
-  { id: 'DRV-0208', name: 'Koné Mariam', code: 'DRV-0208', type: 'Affilié', partenaire: 'Moto Top', zone: 'Adjamé', disponibilite: 'Disponible', mode: 'Manuel' },
-  { id: 'DRV-0209', name: 'Coulibaly Serge', code: 'DRV-0209', type: 'Affilié', partenaire: 'Move CI', zone: 'Abobo', disponibilite: 'Indisponible', mode: 'Auto' },
-  { id: 'DRV-0210', name: 'Ibrahim Sory', code: 'DRV-0210', type: 'Indépendant', partenaire: 'Aucun (Direct)', zone: 'Treichville', disponibilite: 'Occupé', mode: 'N/A', missionActuelle: { ref: 'DLV-2026-001238', trajet: 'Treichville → Marcory', statut: 'En livraison' } },
+  { id: 'DRV-0203', name: 'Konan Yao', code: 'DRV-0203', phone: '07 09 11 22 33', type: 'Affilié', partenaire: 'Speed Livreur', zone: 'Yopougon', disponibilite: 'Occupé', mode: 'Auto', missionActuelle: { ref: 'DLV-2026-001241', trajet: 'Yopougon → Plateau', statut: 'En livraison' } },
+  { id: 'DRV-0204', name: 'Traoré Ibrahim', code: 'DRV-0204', phone: '07 02 33 44 55', type: 'Affilié', partenaire: 'Liva Auto', zone: 'Treichville', disponibilite: 'Indisponible', mode: 'Manuel' },
+  { id: 'DRV-0205', name: 'N\'Guessan Paul', code: 'DRV-0205', phone: '07 05 66 77 88', type: 'Affilié', partenaire: 'Auto Vrac', zone: 'Koumassi', disponibilite: 'Disponible', mode: 'Auto' },
+  { id: 'DRV-0206', name: 'Koffi Blaise', code: 'DRV-0206', phone: '07 01 22 33 44', type: 'Affilié', partenaire: 'Express CI', zone: 'Plateau', disponibilite: 'Compte suspendu', mode: 'N/A' },
+  { id: 'DRV-0207', name: 'Yao Christian', code: 'DRV-0207', phone: '07 04 55 66 77', type: 'Affilié', partenaire: 'Rapid Delivery', zone: 'Port-Bouët', disponibilite: 'Occupé', mode: 'Auto', missionActuelle: { ref: 'DLV-2026-001239', trajet: 'Port-Bouët → Marcory', statut: 'En livraison' } },
+  { id: 'DRV-0208', name: 'Koné Mariam', code: 'DRV-0208', phone: '07 08 99 00 11', type: 'Affilié', partenaire: 'Moto Top', zone: 'Adjamé', disponibilite: 'Disponible', mode: 'Manuel' },
+  { id: 'DRV-0209', name: 'Coulibaly Serge', code: 'DRV-0209', phone: '07 03 44 55 66', type: 'Affilié', partenaire: 'Move CI', zone: 'Abobo', disponibilite: 'Indisponible', mode: 'Auto' },
+  { id: 'DRV-0210', name: 'Ibrahim Sory', code: 'DRV-0210', phone: '07 07 88 99 00', type: 'Indépendant', partenaire: 'Aucun (Direct)', zone: 'Treichville', disponibilite: 'Occupé', mode: 'N/A', missionActuelle: { ref: 'DLV-2026-001238', trajet: 'Treichville → Marcory', statut: 'En livraison' } },
 ];
 
 export default function LivreursPage() {
@@ -75,7 +75,7 @@ export default function LivreursPage() {
           </button>
         </div>
 
-        {/* 1. LES 5 CARTES KPI PRINCIPALES (Guide 06.01)[cite: 365] */}
+        {/* 1. LES 5 CARTES KPI PRINCIPALES */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
             <div>
@@ -166,7 +166,7 @@ export default function LivreursPage() {
           </div>
         </div>
 
-        {/* 2. TABLEAU DES LIVREURS (Guide 06.01)[cite: 365] */}
+        {/* 2. TABLEAU DES LIVREURS */}
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -252,7 +252,7 @@ export default function LivreursPage() {
           </div>
         </div>
 
-        {/* 3. BLOCS GRAPHIQUES INFÉRIEURS (Répartition par disponibilité, Activité, Missions par partenaire) */}
+        {/* 3. BLOCS GRAPHIQUES INFÉRIEURS */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
             <h2 className="font-bold text-slate-800 text-xs">Répartition par disponibilité</h2>
@@ -295,7 +295,7 @@ export default function LivreursPage() {
 
       </div>
 
-      {/* 4. PANNEAU LATÉRAL DROIT : DÉTAILS DU LIVREUR (Guide 06.01)[cite: 365] */}
+      {/* 4. PANNEAU LATÉRAL DROIT : DÉTAILS DU LIVREUR */}
       <aside className="w-full xl:w-96 bg-white rounded-xl border border-slate-200 shadow-xs shrink-0 overflow-hidden p-4 space-y-4">
         
         {/* En-tête panneau latéral */}

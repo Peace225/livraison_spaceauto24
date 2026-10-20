@@ -52,7 +52,8 @@ export default function CommandCenterPage() {
           } 
           else if (payload.eventType === 'UPDATE') {
             const updatedMission = payload.new as Mission;
-            const missionId = updatedMission.mission_id || (updatedMission as any).MissionID;
+            // Correction de la propriété de l'identifiant pour correspondre au type Mission
+            const missionId = updatedMission.MissionID || (updatedMission as any).mission_id;
             if (missionId) {
               updateMissionStatus(missionId, updatedMission.Status);
             }
@@ -204,7 +205,7 @@ export default function CommandCenterPage() {
           </div>
         </div>
 
-        {/* Carte des missions en temps réel (Abidjan - Épingles de zones géographiques) */}
+        {/* Carte des missions en temps réel (Abidjan) */}
         <div className="lg:col-span-3 bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs space-y-2">
           <div className="flex items-center justify-between font-bold text-slate-700">
             <span>Carte des missions en temps réel</span>
@@ -213,7 +214,6 @@ export default function CommandCenterPage() {
           <div className="h-36 bg-sky-50/80 rounded-lg border border-slate-200 flex flex-col items-center justify-center p-2 relative overflow-hidden shadow-inner">
             <div className="absolute inset-0 opacity-30 bg-[radial-gradient(#38bdf8_1.5px,transparent_1.5px)] [background-size:14px_14px]" />
             
-            {/* Épingles géographiques interactives d'Abidjan */}
             <div className="absolute top-3 left-4 flex flex-col items-center animate-bounce">
               <span className="px-1.5 py-0.5 bg-blue-600 text-white rounded text-[8px] font-bold shadow-xs">COCODY (14)</span>
               <span className="w-2 h-2 bg-blue-600 rotate-45 -mt-0.5" />
@@ -234,7 +234,7 @@ export default function CommandCenterPage() {
               <span className="w-2 h-2 bg-red-600 rotate-45 -mt-0.5" />
             </div>
 
-            <div className="z-10 mt-auto bg-white/90 backdrop-blur-xs px-2.5 py-0.5 rounded border border-slate-200 text-[9px] font-extrabold text-slate-700 shadow-xs">
+            <div className="z-10 mt-auto bg-white/95 backdrop-blur-xs px-2.5 py-0.5 rounded border border-slate-200 text-[9px] font-extrabold text-slate-700 shadow-xs">
               ABIDJAN — Mode Zonal V1 (Sans GPS)
             </div>
           </div>
@@ -256,7 +256,7 @@ export default function CommandCenterPage() {
         </div>
       </div>
 
-      {/* 4. OPERATIONS TIMELINE (Dernières opérations avec Icônes) */}
+      {/* 4. OPERATIONS TIMELINE */}
       <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs space-y-2.5">
         <div className="flex items-center justify-between font-bold text-slate-700">
           <span>Operations Timeline (dernières opérations)</span>
@@ -333,7 +333,7 @@ export default function CommandCenterPage() {
         </div>
       </div>
 
-      {/* 5. GRILLE INFÉRIEURE : MISSIONS RÉCENTES, PARTENAIRES, LIVREURS EN LIGNE, PERF PAR ZONE & ALERTES & INCIDENTS */}
+      {/* 5. GRILLE INFÉRIEURE */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         
         {/* Missions récentes */}
@@ -380,10 +380,9 @@ export default function CommandCenterPage() {
           </div>
         </div>
 
-        {/* Colonne centrale basse : Partenaires (Logos stylisés) & Livreurs en ligne (Photos avatars) */}
+        {/* Partenaires & Livreurs en ligne */}
         <div className="lg:col-span-4 space-y-3">
           
-          {/* Partenaires */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-3.5 space-y-2">
             <div className="flex items-center justify-between font-bold text-slate-700">
               <span>Partenaires</span>
@@ -412,7 +411,6 @@ export default function CommandCenterPage() {
             </div>
           </div>
 
-          {/* Livreurs en ligne (Avec Avatars) */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-3.5 space-y-2">
             <div className="flex items-center justify-between font-bold text-slate-700">
               <span>Livreurs en ligne</span>
@@ -443,10 +441,9 @@ export default function CommandCenterPage() {
 
         </div>
 
-        {/* Colonne droite basse : Alertes & Incidents & Performance par zone */}
+        {/* Alertes & Incidents & Performance par zone */}
         <div className="lg:col-span-4 space-y-3">
           
-          {/* Bloc Alertes & Incidents */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-3.5 space-y-2.5">
             <div className="flex items-center justify-between font-bold text-slate-700">
               <span>Alertes & Incidents</span>
@@ -471,7 +468,6 @@ export default function CommandCenterPage() {
             </div>
           </div>
 
-          {/* Performance par zone */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-3.5 space-y-2.5">
             <div className="flex items-center justify-between font-bold text-slate-700">
               <span>Performance par zone</span>

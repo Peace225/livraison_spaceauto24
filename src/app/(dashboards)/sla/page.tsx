@@ -28,8 +28,8 @@ interface SlaItem {
 const SLA_LIST: SlaItem[] = [
   { id: 'SLA-01', indicateur: 'Délai de prise en charge', partenaire: 'Express CI', objectif: '< 15 min', actuel: '12 min', conformite: '98.5%', statut: 'Conforme' },
   { id: 'SLA-02', indicateur: 'Délai de livraison global', partenaire: 'Moto Top', objectif: '< 60 min', actuel: '45 min', conformite: '96.2%', statut: 'Conforme' },
-  { id: 'SLA-03', indicateur: 'Taux de réussite des livraisons', partenaire: 'Speed Livreur', objectif: '> 95%', actuel: '93.0%', statut: 'Attention' },
-  { id: 'SLA-04', indicateur: 'Temps de réponse aux propositions', partenaire: 'Liva Auto', objectif: '< 5 min', actuel: '8 min', statut: 'Critique', conformite: '88.4%' },
+  { id: 'SLA-03', indicateur: 'Taux de réussite des livraisons', partenaire: 'Speed Livreur', objectif: '> 95%', actuel: '93.0%', conformite: '93.0%', statut: 'Attention' },
+  { id: 'SLA-04', indicateur: 'Temps de réponse aux propositions', partenaire: 'Liva Auto', objectif: '< 5 min', actuel: '8 min', conformite: '88.4%', statut: 'Critique' },
 ];
 
 export default function SlaPage() {

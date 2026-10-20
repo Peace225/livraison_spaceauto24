@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { MissionRecord, MissionOfficialStatus } from '@/types';
 import {
   Filter,
   RotateCcw,
@@ -23,6 +22,46 @@ import {
   MapPin,
   Search
 } from 'lucide-react';
+
+export type MissionOfficialStatus = 
+  | 'A_ASSIGNER' 
+  | 'ASSIGNEE' 
+  | 'A_RECUPERER' 
+  | 'COLIS_RECUPERE' 
+  | 'EN_COURS' 
+  | 'LIVREE' 
+  | 'CONFIRMEE_DESTINATAIRE' 
+  | 'TERMINEE' 
+  | 'INCIDENT' 
+  | 'ANNULEE';
+
+export interface MissionRecord {
+  missionId: string;
+  orderId: string;
+  pickupZone: string;
+  deliveryZone: string;
+  vendorName: string;
+  vendorAddress: string;
+  customerName: string;
+  customerAddress: string;
+  partnerName: string;
+  driverName: string;
+  driverCode: string;
+  circuitType: string;
+  status: MissionOfficialStatus;
+  priority: string;
+  type: string;
+  createdAt: string;
+  expectedAt: string;
+  deliveryFeeFcfa: number;
+  paymentMethod: string;
+  instructions: string;
+  articles: Array<{ ref: string; name: string; qty: number }>;
+  otpValidatedAt?: string;
+  deliveredAt?: string;
+  customerConfirmedAt?: string;
+  completedAt?: string;
+}
 
 const INITIAL_MISSIONS: MissionRecord[] = [
   {
@@ -615,14 +654,14 @@ export default function MissionsPage() {
                 <div className="flex justify-between"><span className="text-slate-500">Instructions :</span><span className="text-slate-700 text-right">{activeMission.instructions}</span></div>
               </div>
 
-              {/* Articles (3) */}
+              {/* Articles */}
               <div className="border-t border-slate-100 pt-3 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-slate-700">Articles ({activeMission.articles.length})</span>
                   <span className="text-blue-600 font-semibold cursor-pointer hover:underline">Voir tous les articles →</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
-                  {activeMission.articles.map((art) => (
+                  {activeMission.articles.map((art: { ref: string; name: string; qty: number }) => (
                     <div key={art.ref} className="p-2 bg-slate-50 rounded-lg border border-slate-200 text-center space-y-1">
                       <div className="w-8 h-8 mx-auto bg-slate-200 rounded flex items-center justify-center font-bold text-slate-600 text-[10px]">IMG</div>
                       <p className="font-bold text-slate-800 truncate">{art.name}</p>

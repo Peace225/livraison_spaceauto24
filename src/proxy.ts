@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Mode test : on laisse passer tout le monde sans vérification d'authentification
   return NextResponse.next();
 }
